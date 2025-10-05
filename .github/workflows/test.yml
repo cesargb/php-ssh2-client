@@ -24,6 +24,7 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: ${{ matrix.php }}
+        extensions: ssh2
 
     - name: Validate composer.json and composer.lock
       run: composer validate
@@ -32,6 +33,20 @@ jobs:
       run: |
         composer install
         composer dump
+
+    - name: Install SSH server
+      run: |
+        apt install -y openssh-server
+        mkdir -p /var/run/sshd
+        echo "root:rootpassword" | sudo chpasswd
+        sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+        sed -i 's/Port 22/Port 2222/' /etc/ssh/sshd_config
+        service ssh start
+    - name: Show SSH connection info
+      run: |
+        echo "You can now SSH into localhost on port 2222 with root/rootpassword"
+        ssh-keyscan -p 2222 localhost >> ~/.ssh/known_hosts
+        ssh -p 2222 root@localhost "echo 'SSH works!'"
 
     - name: Run test phpunit
       run: composer test

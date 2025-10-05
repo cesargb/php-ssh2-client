@@ -3,7 +3,8 @@
     "description": "PHP SSH Client Library",
     "type": "library",
     "require": {
-        "php": "^8.2"
+        "php": "^8.2",
+        "ext-ssh2": "*"
     },
     "homepage": "https://github.com/cesargb/php-ssh",
     "license": "MIT",

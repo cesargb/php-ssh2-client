@@ -2,17 +2,27 @@
 
 namespace Test;
 
+use Cesargb\Ssh\Client;
 use PHPUnit\Framework\TestCase;
 
 class SshTest extends TestCase
 {
-    public function testExample()
+    public function test_get_finger_print()
     {
-        $this->assertTrue($this->getValue() > 0);
+        $ssh = new Client('loclahost', 'cesargb.dev');
+
+        $connection = $ssh->connect();
+
+        $this->assertTrue($connection->isConnected());
+
+        $fingerPrint = $connection->fingerPrint();
+        $this->assertNotEmpty($fingerPrint);
+
+        $connection->disconnect();
+
+        $this->assertFalse($connection->isConnected());
+
     }
 
-    private function getValue(): int
-    {
-        return 42;
-    }
+
 }
