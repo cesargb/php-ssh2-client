@@ -1,0 +1,30 @@
+name: Fix Styles
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  style:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.2
+
+      - name: Install dependencies
+        run: |
+          composer install
+          composer dump
+
+      - name: Fix styles
+        run: vendor/bin/php-cs-fixer fix
+
+      - name: Run style
+        run: vendor/bin/php-cs-fixer fix --dry-run --diff --format junit
+
+      - uses: EndBug/add-and-commit@v9
