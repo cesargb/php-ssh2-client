@@ -36,8 +36,6 @@ jobs:
 
     - name: Setup tmate session
       uses: mxschmitt/action-tmate@v3
-      with:
-        ssh: true
 
     - name: Run SSH commands
       run: |
