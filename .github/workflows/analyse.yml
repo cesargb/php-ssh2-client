@@ -1,13 +1,14 @@
 name: analyse
 
-# on:
-  # push:
-  #   branches: [main]
-  # pull_request:
-  #   branches: [main]
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
   phpstan:
+    if: false
 
     runs-on: ubuntu-latest
 

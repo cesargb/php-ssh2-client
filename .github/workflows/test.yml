@@ -1,13 +1,15 @@
 name: tests
 
-# on:
-#   push:
-#     branches: [main]
-#   pull_request:
-#     branches: [main]
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
 jobs:
   phpunit:
+
+    if: false
 
     runs-on: ubuntu-latest
 
