@@ -8,6 +8,11 @@ class SshTest extends TestCase
 {
     public function testExample()
     {
-        $this->assertTrue(true);
+        $this->assertTrue($this->getValue() > 0);
+    }
+
+    private function getValue(): int
+    {
+        return 42;
     }
 }
