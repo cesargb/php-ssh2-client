@@ -1,18 +1,6 @@
-# php-skeleton
+# A simple PHP library for SSH
 
-## Install
-
-Via Composer
-
-```bash
-composer require descom/package_name
-```
-
-## Usage
-
-```php
-$skeleton = new Descom\Skeleton\SkeletonClass;
-```
+A simple PHP library for establishing SSH connections.
 
 ## Testing
 
