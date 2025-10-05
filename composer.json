@@ -1,12 +1,12 @@
 {
-    "name": "cesargb/php-ssh",
-    "description": "PHP SSH Client Library",
+    "name": "cesargb/ssh2-client",
+    "description": "A PHP SSH2 client wrapper providing a clean and modern interface to the ssh2 extension.",
     "type": "library",
     "require": {
         "php": "^8.2",
         "ext-ssh2": "*"
     },
-    "homepage": "https://github.com/cesargb/php-ssh",
+    "homepage": "https://github.com/cesargb/php-ssh2-client",
     "license": "MIT",
     "authors": [
         {

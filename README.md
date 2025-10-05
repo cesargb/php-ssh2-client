@@ -1,6 +1,6 @@
-# A simple PHP library for SSH
+# PHP SSH2 Client
 
-A simple PHP library for establishing SSH connections using the `ext-ssh2` extension.
+A PHP SSH2 client wrapper providing a clean and modern interface to the ssh2 extension.
 
 ## Usage
 
