@@ -4,6 +4,6 @@ namespace Cesargb\Ssh\Exceptions;
 
 use Exception;
 
-class SshException extends Exception
+abstract class SshException extends Exception
 {
 }
