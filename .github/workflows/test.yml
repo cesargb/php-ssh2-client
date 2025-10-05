@@ -36,7 +36,7 @@ jobs:
 
     - name: Install SSH server
       run: |
-        apt install -y openssh-server
+        sudo apt install -y openssh-server
         mkdir -p /var/run/sshd
         echo "root:rootpassword" | sudo chpasswd
         sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
