@@ -1,16 +1,16 @@
 {
-    "name": "descom/skeleton",
-    "description": "package_description",
+    "name": "cesargb/php-ssh",
+    "description": "PHP SSH Client Library",
     "type": "library",
     "require": {
-        "php": "^8.0"
+        "php": "^8.2"
     },
-    "homepage": "https://github.com/descom/skeleton",
+    "homepage": "https://github.com/cesargb/php-ssh",
     "license": "MIT",
     "authors": [
         {
             "name": "Cesar Garcia",
-            "email": "cesar@descom.es",
+            "email": "cesargb@gmail.com",
             "role": "Developer"
         }
     ],
@@ -19,16 +19,14 @@
         "preferred-install": "dist",
         "sort-packages": true
     },
-    "minimum-stability": "dev",
     "prefer-stable": true,
     "require-dev": {
-        "descom/dev": "^1.0",
-        "phpstan/phpstan": "^1.11",
-        "phpunit/phpunit": "^9.5"
+        "phpstan/phpstan": "^2.1",
+        "phpunit/phpunit": "^12.0"
     },
     "autoload": {
         "psr-4": {
-            "Descom\\Skeleton\\": "src"
+            "Cesargb\\Ssh\\": "src"
         }
     },
     "scripts": {
