@@ -9,17 +9,29 @@ require 'vendor/autoload.php';
 
 use Cesargb\Ssh\Client;
 
-$ssh = new Client('your-ssh-server.com', 'username');
-$connection = $ssh->connect();
+$sshClient = new Client('your-ssh-server.com');
 
-if (! $connection->isConnected()) {
+$sshSession = $sshClient->connect();
+
+if (! $sshSession->isConnected()) {
     die('Connection failed');
 }
 
-$fingerprint = $connection->fingerPrint();
+$fingerprint = $sshSession->fingerPrint();
 echo "Server Fingerprint: {$fingerprint}\n";
 
-$connection->disconnect();
+$sshSession->withAuthKey('username', '/path/to/public/key.pub', '/path/to/private/key');
+
+if (! $sshSession->isAuthenticated()) {
+    $sshSession->disconnect();
+
+    die('Authentication failed');
+}
+
+$commandOutput = $sshSession->exec('ls -la');
+echo "Command Output:\n{$commandOutput}\n";
+
+
 ```
 
 ## Testing
