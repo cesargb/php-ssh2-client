@@ -7,35 +7,25 @@ namespace Cesargb\Ssh;
 final class Connection
 {
     private mixed $resource = false;
+    private bool $authenticated = false;
 
     public function __construct(private Client $client)
     {
     }
 
-
     public function connect(): self
     {
+        $this->authenticated = false;
+
         $this->resource = ssh2_connect($this->client->getHost(), (int) $this->client->getPort());
 
-        var_dump($this->resource);
         return $this;
     }
 
-    public function getResource()
-    {
-        return $this->resource;
-    }
-
-    public function isConnected(): bool
-    {
-        return is_resource($this->resource);
-    }
 
     public function fingerPrint(): string
     {
-        if (!is_resource($this->resource)) {
-            throw new \RuntimeException('Not connected');
-        }
+        $this->mustBeConnected();
 
         $fingerprint = ssh2_fingerprint($this->resource);
 
@@ -46,11 +36,23 @@ final class Connection
         return $fingerprint;
     }
 
+    public function withAuthKey(string $username, string $publicKey, string $privateKey, string $passphrase = ''): self
+    {
+        $this->mustBeConnected();
+
+        if (!ssh2_auth_pubkey_file($this->resource, $username, $publicKey, $privateKey, $passphrase)) {
+            throw new \RuntimeException('Could not authenticate with public key');
+        }
+
+        $this->authenticated = true;
+
+        return $this;
+    }
+
+
     public function exec(string $command): string
     {
-        if (!is_resource($this->resource)) {
-            throw new \RuntimeException('Not connected');
-        }
+        $this->mustBeConnected();
 
         $stream = ssh2_exec($this->resource, $command);
 
@@ -74,8 +76,33 @@ final class Connection
 
     public function disconnect(): void
     {
+        $this->authenticated = false;
+
         if (is_resource($this->resource)) {
             ssh2_disconnect($this->resource);
+        }
+    }
+
+
+    public function isConnected(): bool
+    {
+        return is_resource($this->resource);
+    }
+
+    public function isAuthenticated(): bool
+    {
+        return $this->authenticated;
+    }
+
+    public function getResource()
+    {
+        return $this->resource;
+    }
+
+    private function mustBeConnected(): void
+    {
+        if (!is_resource($this->resource)) {
+            throw new \RuntimeException('Not connected');
         }
     }
 }

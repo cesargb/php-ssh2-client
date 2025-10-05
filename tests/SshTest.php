@@ -9,7 +9,7 @@ class SshTest extends TestCase
 {
     public function test_get_finger_print()
     {
-        $ssh = new Client('localhost', 'test');
+        $ssh = new Client('localhost');
 
         $connection = $ssh->connect();
 

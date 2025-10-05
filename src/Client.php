@@ -8,18 +8,8 @@ final class Client
 {
     private string $port = '22';
 
-    public function __construct(private string $host, private string $user)
+    public function __construct(private string $host)
     {
-    }
-
-    public function getHost(): string
-    {
-        return $this->host;
-    }
-
-    public function getPort(): string
-    {
-        return $this->port;
     }
 
     public function withPort(string $port): self
@@ -34,8 +24,13 @@ final class Client
         return new Connection($this)->connect();
     }
 
-    // private function __toString(): string
-    // {
-    //     return sprintf('%s@%s:%s', $this->user, $this->host, $this->port);
-    // }
+    public function getHost(): string
+    {
+        return $this->host;
+    }
+
+    public function getPort(): string
+    {
+        return $this->port;
+    }
 }
