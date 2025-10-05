@@ -30,8 +30,6 @@ if (! $sshSession->isAuthenticated()) {
 
 $commandOutput = $sshSession->exec('ls -la');
 echo "Command Output:\n{$commandOutput}\n";
-
-
 ```
 
 ## Testing
