@@ -24,5 +24,17 @@ class SshTest extends TestCase
 
     }
 
+    public function test_auth_with_key()
+    {
+        $ssh = new Client('localhost');
 
+        $connection = $ssh->connect();
+
+        $connection->withAuthPublicKey('admin', __DIR__ . '/id_rsa.pub', __DIR__ . '/id_rsa');
+
+        $connection->disconnect();
+
+        $this->assertFalse($connection->isConnected());
+
+    }
 }

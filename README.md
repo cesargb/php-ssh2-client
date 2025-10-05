@@ -13,23 +13,15 @@ $sshClient = new Client('your-ssh-server.com');
 
 $sshSession = $sshClient->connect();
 
-if (! $sshSession->isConnected()) {
-    die('Connection failed');
-}
-
 $fingerprint = $sshSession->fingerPrint();
 echo "Server Fingerprint: {$fingerprint}\n";
 
-$sshSession->withAuthKey('username', '/path/to/public/key.pub', '/path/to/private/key');
-
-if (! $sshSession->isAuthenticated()) {
-    $sshSession->disconnect();
-
-    die('Authentication failed');
-}
+$sshSession->withAuthPublicKey('username', '/path/to/public/key.pub', '/path/to/private/key');
 
 $commandOutput = $sshSession->exec('ls -la');
 echo "Command Output:\n{$commandOutput}\n";
+
+$sshSession->disconnect();
 ```
 
 ## Testing

@@ -6,31 +6,21 @@ namespace Cesargb\Ssh;
 
 final class Client
 {
-    private string $port = '22';
+    private int $port = 22;
 
     public function __construct(private string $host)
     {
     }
 
-    public function withPort(string $port): self
+    public function withPort(int $port): self
     {
         $this->port = $port;
 
         return $this;
     }
 
-    public function connect(): Connection
+    public function connect(): Session
     {
-        return new Connection($this)->connect();
-    }
-
-    public function getHost(): string
-    {
-        return $this->host;
-    }
-
-    public function getPort(): string
-    {
-        return $this->port;
+        return new Session($this)->connect($this->host, $this->port);
     }
 }
