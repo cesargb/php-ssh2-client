@@ -7,9 +7,9 @@ A simple PHP library for establishing SSH connections using the `ext-ssh2` exten
 ``` php
 require 'vendor/autoload.php';
 
-use Cesargb\Ssh\Client;
+use Cesargb\Ssh\SshClient;
 
-$sshClient = new Client('your-ssh-server.com');
+$sshClient = new SshClient('your-ssh-server.com');
 
 $sshSession = $sshClient->connect();
 

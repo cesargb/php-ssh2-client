@@ -2,14 +2,14 @@
 
 namespace Test;
 
-use Cesargb\Ssh\Client;
+use Cesargb\Ssh\SshClient;
 use PHPUnit\Framework\TestCase;
 
 class SshTest extends TestCase
 {
     public function test_get_finger_print()
     {
-        $ssh = new Client('localhost');
+        $ssh = new SshClient('localhost');
 
         $connection = $ssh->connect();
 
@@ -26,7 +26,7 @@ class SshTest extends TestCase
 
     public function test_auth_with_key()
     {
-        $ssh = new Client('localhost');
+        $ssh = new SshClient('localhost');
 
         $connection = $ssh->connect();
 
