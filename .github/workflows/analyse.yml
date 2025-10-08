@@ -8,8 +8,6 @@ on:
 
 jobs:
   phpstan:
-    if: false
-
     runs-on: ubuntu-latest
 
     steps:

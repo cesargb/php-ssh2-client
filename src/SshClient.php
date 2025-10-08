@@ -19,6 +19,6 @@ final class SshClient
 
     public function connect(): Session
     {
-        return new Session($this)->connect($this->host, $this->port);
+        return new Session()->connect($this->host, $this->port);
     }
 }
