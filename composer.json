@@ -33,7 +33,7 @@
     },
     "scripts": {
         "test": "vendor/bin/phpunit --colors=always",
-        "style": "vendor/bin/php-cs-fixer fix",
+        "lint": "vendor/bin/pint",
         "analyze": "vendor/bin/phpstan analyse"
     }
 }

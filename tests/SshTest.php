@@ -23,7 +23,7 @@ class SshTest extends TestCase
         $this->assertFalse($connection->isConnected());
     }
 
-    public function test_auth_with_auth()
+    public function test_auth_with_password()
     {
         $ssh = new SshClient('localhost')->withPort(2222);
 

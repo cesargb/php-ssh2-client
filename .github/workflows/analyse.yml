@@ -21,8 +21,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        composer install
-        composer dump
+        composer install --no-progress --prefer-dist --no-interaction
 
     - name: Run analyze phpstan
       run: composer run analyze
