@@ -29,7 +29,7 @@ class SshTest extends TestCase
 
         $connection = $ssh->connect();
 
-        $connection->withAuthPassword('root', 'secret123');
+        $connection->withAuthPassword('root', 'root');
 
         $this->assertTrue($connection->isAuthenticated());
 
