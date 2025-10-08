@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  phpunit:
+  test:
 
     runs-on: ubuntu-latest
 

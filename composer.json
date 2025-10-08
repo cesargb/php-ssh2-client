@@ -34,6 +34,6 @@
     "scripts": {
         "test": "vendor/bin/phpunit --colors=always",
         "style": "vendor/bin/php-cs-fixer fix",
-        "analyse": "vendor/bin/phpstan analyse"
+        "analyze": "vendor/bin/phpstan analyse"
     }
 }
