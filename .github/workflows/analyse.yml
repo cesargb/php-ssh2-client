@@ -17,11 +17,7 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: 8.3
-
-    - name: Install dependencies
-      run: |
-        composer install
-        composer dump
+        tools: phpstan
 
     - name: Run analyse phpstan
-      run: vendor/bin/phpstan analyse --error-format github
+      run: phpstan

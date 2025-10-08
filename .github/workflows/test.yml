@@ -42,14 +42,5 @@ jobs:
         composer install
         composer dump
 
-    - name: Setup tmate session
-      uses: mxschmitt/action-tmate@v3
-      with:
-        detached: true
-
-    - name: Run SSH commands
-      run: |
-        ssh -o StrictHostKeyChecking=no $TMATE_SSH "echo 'Hello from SSH!'"
-
     - name: Run test phpunit
       run: composer test
