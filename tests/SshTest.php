@@ -30,7 +30,7 @@ class SshTest extends TestCase
 
         $connection = $ssh->connect();
 
-        $connection->withAuthPublicKey('admin', __DIR__ . '/id_rsa.pub', __DIR__ . '/id_rsa');
+        $connection->withAuthPublicKey('admin', __DIR__.'/id_rsa.pub', __DIR__.'/id_rsa');
 
         $connection->disconnect();
 

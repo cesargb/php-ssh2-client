@@ -10,6 +10,7 @@ use Cesargb\Ssh\Exceptions\SshConnectionException;
 final class Session
 {
     private mixed $resource = false;
+
     private bool $authenticated = false;
 
     public function connect(string $host, int $port = 22, ?array $methods = null, array $callbacks = []): self
@@ -26,7 +27,7 @@ final class Session
         ));
 
         if ($this->resource === false) {
-            throw new SshConnectionException('Could not connect to ' . $host . ':' . $port);
+            throw new SshConnectionException('Could not connect to '.$host.':'.$port);
         }
 
         return $this;
@@ -49,7 +50,7 @@ final class Session
     {
         $this->mustBeConnected();
 
-        if (!ssh2_auth_pubkey_file($this->resource, $username, $publicKey, $privateKey, $passphrase)) {
+        if (! ssh2_auth_pubkey_file($this->resource, $username, $publicKey, $privateKey, $passphrase)) {
             $this->disconnect();
             throw new SshAuthenticateException('Could not authenticate with public key');
         }
@@ -63,7 +64,7 @@ final class Session
     {
         $this->mustBeConnected();
 
-        if (!ssh2_auth_password($this->resource, $username, $password)) {
+        if (! ssh2_auth_password($this->resource, $username, $password)) {
             $this->disconnect();
             throw new SshAuthenticateException('Could not authenticate with password');
         }
@@ -77,7 +78,7 @@ final class Session
     {
         $this->mustBeConnected();
 
-        if (!ssh2_auth_agent($this->resource, $username)) {
+        if (! ssh2_auth_agent($this->resource, $username)) {
             $this->disconnect();
             throw new SshAuthenticateException('Could not authenticate with agent');
         }
@@ -96,14 +97,13 @@ final class Session
         if ($acceptedMethods !== true) {
             $this->disconnect();
 
-            throw new SshAuthenticateException('Could not authenticate with none, methods accepted: ' . implode(', ', $acceptedMethods));
+            throw new SshAuthenticateException('Could not authenticate with none, methods accepted: '.implode(', ', $acceptedMethods));
         }
 
         $this->authenticated = true;
 
         return $this;
     }
-
 
     public function exec(string $command): string
     {
@@ -112,7 +112,7 @@ final class Session
         $stream = ssh2_exec($this->resource, $command);
 
         if ($stream === false) {
-            throw new \RuntimeException('Could not execute command: ' . $command);
+            throw new \RuntimeException('Could not execute command: '.$command);
         }
 
         stream_set_blocking($stream, true);
@@ -122,12 +122,11 @@ final class Session
         fclose($stream);
 
         if ($output === false) {
-            throw new \RuntimeException('Could not get output for command: ' . $command);
+            throw new \RuntimeException('Could not get output for command: '.$command);
         }
 
         return $output;
     }
-
 
     public function disconnect(): void
     {
@@ -137,7 +136,6 @@ final class Session
             ssh2_disconnect($this->resource);
         }
     }
-
 
     public function isConnected(): bool
     {
@@ -149,15 +147,10 @@ final class Session
         return $this->authenticated;
     }
 
-    public function getResource()
-    {
-        return $this->resource;
-    }
-
     private function mustBeConnected(): void
     {
-        if (!is_resource($this->resource)) {
-            throw new \RuntimeException('Not connected');
+        if (! is_resource($this->resource)) {
+            throw new SshConnectionException('Not connected');
         }
     }
 }
