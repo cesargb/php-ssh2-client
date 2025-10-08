@@ -9,9 +9,15 @@ on:
 jobs:
   phpunit:
 
-    if: false
-
     runs-on: ubuntu-latest
+
+    services:
+      ssh:
+        image: rastasheep/ubuntu-sshd:18.04
+        ports:
+          - 2222:22
+        env:
+          SSH_PASSWORD: secret123
 
     strategy:
       matrix:
