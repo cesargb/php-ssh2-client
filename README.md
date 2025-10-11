@@ -7,21 +7,27 @@ A PHP SSH2 client wrapper providing a clean and modern interface to the ssh2 ext
 ``` php
 require 'vendor/autoload.php';
 
-use Cesargb\Ssh\SshClient;
+use Cesargb\Ssh\Ssh2Client;
 
-$sshClient = new SshClient('your-ssh-server.com');
+$sshClient = new Ssh2Client()->connect(host: 'localhost', port: 22);
 
-$sshSession = $sshClient->connect();
-
-$fingerprint = $sshSession->fingerPrint();
+$fingerprint = $sshClient->fingerPrint();
 echo "Server Fingerprint: {$fingerprint}\n";
 
-$sshSession->withAuthPublicKey('username', '/path/to/public/key.pub', '/path/to/private/key');
+// $sshClient->withAuthPassword('username', 'password');
+$sshClient->withAuthPublicKey('username', '/path/to/public/key.pub', '/path/to/private/key');
 
-$commandOutput = $sshSession->exec('ls -la');
-echo "Command Output:\n{$commandOutput}\n";
+$commandResult = $sshClient->exec('ls -la');
 
-$sshSession->disconnect();
+$sshClient->disconnect();
+
+if (! $commandResult->success()) {
+    echo "Error Output: {$commandResult->errorOutput}\n";
+    exit($commandResult->getExitStatus());
+}
+
+echo "Command Output: {$commandResult->output}\n";
+
 ```
 
 ## Testing
