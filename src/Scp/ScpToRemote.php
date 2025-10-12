@@ -42,34 +42,59 @@ final class ScpToRemote
 
         $remotePath = new Path($path)->asRemote($this->sshClient);
 
-        if ($this->localPath->isDir())
-        {
-            return $this->copyDirectory($this->localPath, $remotePath);
-        }
+        $this->validateRemotePath($remotePath);
 
-        return $this->copyFile($this->localPath, $remotePath);
+        return $this->copy($this->localPath, $remotePath);
     }
 
-    private function validateLocalPath(): void
+    private function copy(Path $localPath, Path $remotePath): bool
     {
-        if (!$this->localPath->exists()) {
-            throw new FileNotFoundException('Local path '.$this->localPath->path.' does not exist');
+        if ($localPath->isDir()) {
+            if (substr($localPath->path, -1) !== '/') {
+                $remotePath = new Path(rtrim($remotePath->path, '/').'/'.basename($localPath->path));
+                $this->sshClient->exec('mkdir -p '.$remotePath->path);
+            }
+
+            return $this->copyRecursive($localPath, $remotePath);
         }
 
-        if ($this->localPath->isDir() && ! $this->recursive) {
-            throw new NonRecursiveCopyException('Local path '.$this->localPath->path.' is a directory. Use recursive() method to copy directories');
-        }
+        return $this->copyFile($localPath, $remotePath);
     }
 
-    private function copyDirectory(Path $localPath, Path $remotePath): bool
+    private function copyRecursive(Path $localPath, Path $remotePath): bool
     {
-        if (! $remotePath->isDir()) {
-            throw new NonRecursiveCopyException('Remote path '.$remotePath->path.' is not a directory');
+        if ($localPath->isFile()) {
+            return $this->copyFile($localPath, $remotePath);
         }
 
-        $resource = $this->sshClient->getResource();
+        $entries = scandir($localPath->path);
 
-        return ssh2_scp_send($resource, $localPath->path, $remotePath->path, $this->createMode);
+        if ($entries === false) {
+            return false;
+        }
+
+        $success = true;
+
+        foreach ($entries as $entry) {
+            if ($entry === '.' || $entry === '..') {
+                continue;
+            }
+
+            $childLocal = new Path($localPath->path . '/' . $entry);
+            $childRemote = new Path(rtrim($remotePath->path, '/') . '/' . $entry);
+
+            if ($childLocal->isDir()) {
+                $this->sshClient->exec('mkdir -p ' . $childRemote->path);
+            }
+
+            $ok = $this->copyRecursive($childLocal, $childRemote);
+
+            if (! $ok) {
+                $success = false;
+            }
+        }
+
+        return $success;
     }
 
     private function copyFile(Path $localPath, Path $remotePath): bool
@@ -84,5 +109,23 @@ final class ScpToRemote
             $remoteFileName,
             $this->createMode
         );
+    }
+
+     private function validateLocalPath(): void
+    {
+        if (!$this->localPath->exists()) {
+            throw new FileNotFoundException('Local path '.$this->localPath->path.' does not exist');
+        }
+
+        if ($this->localPath->isDir() && ! $this->recursive) {
+            throw new NonRecursiveCopyException('Local path '.$this->localPath->path.' is a directory. Use recursive() method to copy directories');
+        }
+    }
+
+    private function validateRemotePath(Path $remotePath): void
+    {
+        if ($this->localPath->isDir() && ! $remotePath->isDir()) {
+            throw new NonRecursiveCopyException('Remote path '.$remotePath->path.' is not a directory. Use recursive() method to copy directories');
+        }
     }
 }

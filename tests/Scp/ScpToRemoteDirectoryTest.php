@@ -48,4 +48,21 @@ class ScpToRemoteDirectoryTest extends TestCase
         $this->assertEquals('file2', trim(self::$sshClient->exec('cat '. $this->workDir .'/dirs/file2.txt')));
         $this->assertEquals('file3', trim(self::$sshClient->exec('cat '. $this->workDir .'/dirs/subdir/file3.txt')));
     }
+
+    public function test_scp_send_directory_entries_to_directory()
+    {
+        $localDir = __DIR__.'/../fixtures/dirs/';
+        $targetDir = $this->workDir;
+
+        $copied = self::$sshClient->scp()
+            ->fromLocal($localDir)
+            ->recursive()
+            ->to($targetDir);
+
+        $this->assertTrue($copied, 'Recursive copy failed');
+        $this->assertEquals('file1', trim(self::$sshClient->exec('cat '. $this->workDir .'/file1.txt')));
+        $this->assertEquals('file2', trim(self::$sshClient->exec('cat '. $this->workDir .'/file2.txt')));
+        $this->assertTrue(self::$sshClient->exec('test -d '. $this->workDir .'/subdir')->succeeded(), 'Subdirectory was not copied');
+        $this->assertEquals('file3', trim(self::$sshClient->exec('cat '. $this->workDir .'/subdir/file3.txt')));
+    }
 }
