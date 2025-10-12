@@ -7,34 +7,47 @@ use PHPUnit\Framework\TestCase;
 
 class ScpTest extends TestCase
 {
-    public function test_scp_send()
+    public function test_scp_send_file_to_file()
     {
         $tempFile = $this->generateTempFile('This is a test file for SCP upload.');
         $targetFile = '/tmp/'.basename($tempFile);
 
-        $sshClient = new Ssh2Client()->connect(port: 2222)
-            ->withAuthPassword('root', 'root');
+        $sshClient = Ssh2Client::connect(port: 2222)->withAuthPassword('root', 'root');
 
-        $sshClient->scp()->send($tempFile, $targetFile);
+        $result = $sshClient->scp()->fromLocal($tempFile)->to($targetFile);
 
         unlink($tempFile);
 
+        $this->assertTrue($result);
         $this->assertEquals(
             'This is a test file for SCP upload.',
             $sshClient->exec('cat '.$targetFile)
         );
 
+
         $sshClient->disconnect();
     }
 
-    // public function test_scp_receive()
+    // public function test_scp_send_file_to_directory()
     // {
-    //     $sshClient = new Ssh2Client()->connect(port: 2222)
-    //         ->withAuthPassword('root', 'root');
+    //     $tempFile = $this->generateTempFile('This is a test file for SCP upload.');
+    //     $targetDir = '/tmp/';
+    //     $targetFile = $targetDir.basename($tempFile);
 
-    //     $sshClient->scp()->receive('/root/.ssh/authorized_keys', __DIR__.'/fixtures/authorized_keys');
+    //     $sshClient = new Ssh2Client();
 
-    //     $this->assertNotEmpty(file_get_contents(__DIR__.'/fixtures/authorized_keys'));
+    //     $sshClient->connect(port: 2222)
+    //         ->withAuthPassword('root', 'root')
+    //         ->scp()
+    //         ->fromLocal($tempFile)
+    //         ->to($targetDir);
+
+    //     unlink($tempFile);
+
+    //     $this->assertEquals(
+    //         'This is a test file for SCP upload.',
+    //         $sshClient->exec('cat '.$targetFile)
+    //     );
 
     //     $sshClient->disconnect();
     // }

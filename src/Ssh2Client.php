@@ -7,7 +7,8 @@ namespace Cesargb\Ssh;
 use Cesargb\Ssh\Exceptions\SshAuthenticateException;
 use Cesargb\Ssh\Exceptions\SshConnectionException;
 use Cesargb\Ssh\Exec\CommandResult;
-use Cesargb\Ssh\Exec\Exec;
+use Cesargb\Ssh\Exec\ExecCommand;
+use Cesargb\Ssh\Scp\ScpCommand;
 
 final class Ssh2Client
 {
@@ -15,7 +16,8 @@ final class Ssh2Client
 
     private bool $authenticated = false;
 
-    public function connect(string $host = 'localhost', int $port = 22): self
+
+    public function __construct(string $host = 'localhost', int $port = 22)
     {
         $this->authenticated = false;
 
@@ -33,8 +35,11 @@ final class Ssh2Client
         if ($this->resource === false) {
             throw new SshConnectionException('Could not connect to '.$host.':'.$port);
         }
+    }
 
-        return $this;
+    public static function connect(string $host = 'localhost', int $port = 22): self
+    {
+        return new self($host, $port);
     }
 
     public function fingerPrint(): string
@@ -109,11 +114,6 @@ final class Ssh2Client
         return $this;
     }
 
-    public function exec(string $command): CommandResult
-    {
-        return new Exec($this)->execute($command);
-    }
-
     public function disconnect(): void
     {
         $this->authenticated = false;
@@ -123,14 +123,19 @@ final class Ssh2Client
         }
     }
 
+    public function exec(string $command): CommandResult
+    {
+        return new ExecCommand($this)->execute($command);
+    }
+
+    public function scp(): ScpCommand
+    {
+        return new ScpCommand($this);
+    }
+
     public function isConnected(): bool
     {
         return is_resource($this->resource);
-    }
-
-    public function scp(): Scp
-    {
-        return new Scp($this);
     }
 
     public function isAuthenticated(): bool
