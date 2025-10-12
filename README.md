@@ -74,6 +74,28 @@ $sshClient->disconnect();
 // $commandResult->errorOutput contains any error output by stderr
 ```
 
+## SCP File Transfers
+
+``` php
+$sshClient = Ssh2Client::connect(host: 'example.com', port: 22)
+    ->withAuthPassword('username', 'password');
+
+$scpResult = $sshClient
+    ->scp()
+    ->fromLocal('/local/path/to/file.txt')
+    ->to('/remote/path/to/file.txt');
+
+$sshClient->disconnect();
+
+if (! $scpResult) {
+    echo "File transfer failed.\n";
+
+    exit(1);
+}
+
+echo "File transferred successfully.\n";
+```
+
 ## Testing
 
 ``` bash
