@@ -42,9 +42,12 @@ final class ScpToRemote
 
         $remotePath = new Path($path)->asRemote($this->sshClient);
 
-        $resource = $this->sshClient->getResource();
+        if ($this->localPath->isDir())
+        {
+            return $this->copyDirectory($this->localPath, $remotePath);
+        }
 
-        return ssh2_scp_send($resource, $this->localPath->path, $remotePath->path, $this->createMode);
+        return $this->copyFile($this->localPath, $remotePath);
     }
 
     private function validateLocalPath(): void
@@ -58,10 +61,28 @@ final class ScpToRemote
         }
     }
 
-    private function copyFileToFile(string $localPath, string $remotePath): bool
+    private function copyDirectory(Path $localPath, Path $remotePath): bool
     {
+        if (! $remotePath->isDir()) {
+            throw new NonRecursiveCopyException('Remote path '.$remotePath->path.' is not a directory');
+        }
+
         $resource = $this->sshClient->getResource();
 
-        return ssh2_scp_send($resource, $localPath, $remotePath, $this->createMode);
+        return ssh2_scp_send($resource, $localPath->path, $remotePath->path, $this->createMode);
+    }
+
+    private function copyFile(Path $localPath, Path $remotePath): bool
+    {
+        $remoteFileName = $remotePath->isDir()
+                ? rtrim($remotePath->path, '/').'/'.basename($localPath->path)
+                : $remotePath->path;
+
+        return ssh2_scp_send(
+            $this->sshClient->getResource(),
+            $localPath->path,
+            $remoteFileName,
+            $this->createMode
+        );
     }
 }
