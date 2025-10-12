@@ -40,7 +40,7 @@ final class ScpToRemote
     {
         $this->validateLocalPath();
 
-        $remotePath = new Path($path)->asRemote($this->sshClient);
+        $remotePath = (new Path($path))->asRemote($this->sshClient);
 
         $this->validateRemotePath($remotePath);
 

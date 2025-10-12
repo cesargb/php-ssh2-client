@@ -17,7 +17,7 @@ final class ScpToLocal
 
     public function __construct(private Ssh2Client $sshClient, string $remotePath)
     {
-        $this->remotePath = new Path($remotePath)->asRemote($sshClient);
+        $this->remotePath = (new Path($remotePath))->asRemote($sshClient);
     }
 
     public function recursive(bool $recursive = true): self
