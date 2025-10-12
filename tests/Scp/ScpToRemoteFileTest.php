@@ -24,7 +24,6 @@ class ScpToRemoteFileTest extends TestCase
             $sshClient->exec('cat '.$targetFile)
         );
 
-
         $sshClient->disconnect();
     }
 

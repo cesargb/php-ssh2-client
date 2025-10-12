@@ -5,14 +5,11 @@ declare(strict_types=1);
 namespace Cesargb\Ssh\Exec;
 
 use Cesargb\Ssh\Exceptions\SshConnectionException;
-use Cesargb\Ssh\Exec\CommandResult;
 use Cesargb\Ssh\Ssh2Client;
 
 final class ExecCommand
 {
-    public function __construct(private Ssh2Client $sshClient)
-    {
-    }
+    public function __construct(private Ssh2Client $sshClient) {}
 
     public function execute(string $command): CommandResult
     {

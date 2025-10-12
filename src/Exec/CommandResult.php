@@ -31,5 +31,4 @@ final class CommandResult
     {
         return $this->succeeded() ? $this->output : $this->errorOutput;
     }
-
 }

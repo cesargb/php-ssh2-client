@@ -9,13 +9,14 @@ use Cesargb\Ssh\Ssh2Client;
 class Path
 {
     private ?bool $exists = null;
+
     private ?bool $isDir = null;
+
     private ?bool $isFile = null;
+
     private ?Ssh2Client $sshClient = null;
 
-    public function __construct(public readonly string $path) {
-
-    }
+    public function __construct(public readonly string $path) {}
 
     public function asRemote(Ssh2Client $sshClient): self
     {
@@ -31,7 +32,7 @@ class Path
         }
 
         $this->exists = $this->sshClient
-            ? $this->sshClient->exec('test -e ' . escapeshellarg($this->path))->succeeded()
+            ? $this->sshClient->exec('test -e '.escapeshellarg($this->path))->succeeded()
             : file_exists($this->path);
 
         return $this->exists;
@@ -44,7 +45,7 @@ class Path
         }
 
         $this->isFile = $this->sshClient
-            ? $this->sshClient->exec('test -f ' . escapeshellarg($this->path))->succeeded()
+            ? $this->sshClient->exec('test -f '.escapeshellarg($this->path))->succeeded()
             : is_file($this->path);
 
         return $this->isFile;
@@ -57,7 +58,7 @@ class Path
         }
 
         $this->isDir = $this->sshClient
-            ? $this->sshClient->exec('test -d ' . escapeshellarg($this->path))->succeeded()
+            ? $this->sshClient->exec('test -d '.escapeshellarg($this->path))->succeeded()
             : is_dir($this->path);
 
         return $this->isDir;

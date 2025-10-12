@@ -16,7 +16,6 @@ final class Ssh2Client
 
     private bool $authenticated = false;
 
-
     public function __construct(string $host = 'localhost', int $port = 22)
     {
         $this->authenticated = false;
@@ -25,7 +24,7 @@ final class Ssh2Client
             host: $host,
             port: $port,
             methods: null,
-                callbacks: [
+            callbacks: [
                 'disconnect' => function () {
                     $this->resource = false;
                 },

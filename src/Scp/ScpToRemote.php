@@ -80,11 +80,11 @@ final class ScpToRemote
                 continue;
             }
 
-            $childLocal = new Path($localPath->path . '/' . $entry);
-            $childRemote = new Path(rtrim($remotePath->path, '/') . '/' . $entry);
+            $childLocal = new Path($localPath->path.'/'.$entry);
+            $childRemote = new Path(rtrim($remotePath->path, '/').'/'.$entry);
 
             if ($childLocal->isDir()) {
-                $this->sshClient->exec('mkdir -p ' . $childRemote->path);
+                $this->sshClient->exec('mkdir -p '.$childRemote->path);
             }
 
             $ok = $this->copyRecursive($childLocal, $childRemote);
@@ -111,9 +111,9 @@ final class ScpToRemote
         );
     }
 
-     private function validateLocalPath(): void
+    private function validateLocalPath(): void
     {
-        if (!$this->localPath->exists()) {
+        if (! $this->localPath->exists()) {
             throw new FileNotFoundException('Local path '.$this->localPath->path.' does not exist');
         }
 
