@@ -14,4 +14,9 @@ final class ScpCommand
     {
         return new ScpToRemote($this->sshClient, $path);
     }
+
+    public function fromRemote(string $path): ScpToLocal
+    {
+        return new ScpToLocal($this->sshClient, $path);
+    }
 }

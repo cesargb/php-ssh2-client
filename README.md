@@ -2,20 +2,19 @@
 
 A PHP SSH2 client wrapper providing a clean and modern interface to the ssh2 extension.
 
-## Usage
+## Basic Usage
 
 ``` php
 require 'vendor/autoload.php';
 
 use Cesargb\Ssh\Ssh2Client;
 
-$sshClient = new Ssh2Client()->connect(host: 'localhost', port: 22);
+$sshClient = Ssh2Client::connect(host: 'localhost');
 
 $fingerprint = $sshClient->fingerPrint();
 echo "Server Fingerprint: {$fingerprint}\n";
 
-// $sshClient->withAuthPassword('username', 'password');
-$sshClient->withAuthPublicKey('username', '/path/to/public/key.pub', '/path/to/private/key');
+$sshClient->withAuthPassword('username', 'password');
 
 $commandResult = $sshClient->exec('ls -la');
 
@@ -23,11 +22,56 @@ $sshClient->disconnect();
 
 if (! $commandResult->success()) {
     echo "Error Output: {$commandResult->errorOutput}\n";
+
     exit($commandResult->getExitStatus());
 }
 
 echo "Command Output: {$commandResult->output}\n";
+```
 
+## Installation
+
+``` bash
+composer require cesargb/ssh2-client
+```
+
+## Authentication Methods
+
+### Password Authentication
+
+``` php
+$sshClient = Ssh2Client::connect(host: 'example.com', port: 22);
+$sshClient->withAuthPassword('username', 'password');
+```
+
+### Public Key Authentication with Passphrase
+
+``` php
+$sshClient = Ssh2Client::connect(host: 'example.com', port: 22);
+$sshClient->withAuthPublicKey('username', '/path/to/public/key.pub', '/path/to/private/key', 'passphrase');
+```
+
+### Agent-Based Authentication
+
+``` php
+$sshClient = Ssh2Client::connect(host: 'example.com', port: 22);
+$sshClient->withAuthAgent('username');
+```
+
+## Executing Commands
+
+``` php
+$sshClient = Ssh2Client::connect(host: 'example.com', port: 22)
+    ->withAuthPassword('username', 'password');
+
+$commandResult = $sshClient->exec('ls -l');
+
+$sshClient->disconnect();
+
+// $commandResult->succeeded() returns true if the command executed successfully
+// $commandResult->getExitStatus() returns the exit status of the command
+// $commandResult->output contains the command output by stdout
+// $commandResult->errorOutput contains any error output by stderr
 ```
 
 ## Testing
