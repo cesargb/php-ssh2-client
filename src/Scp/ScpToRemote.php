@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Cesargb\Ssh\Scp;
 
+use Cesargb\Ssh\Exceptions\Files\FileNotFoundException;
+use Cesargb\Ssh\Exceptions\Files\NonRecursiveCopyException;
+use Cesargb\Ssh\Files\Path;
 use Cesargb\Ssh\Ssh2Client;
 
 final class ScpToRemote
@@ -12,8 +15,11 @@ final class ScpToRemote
 
     private int $createMode = 0644;
 
-    public function __construct(private Ssh2Client $sshClient, private string $localPath)
+    private Path $localPath;
+
+    public function __construct(private Ssh2Client $sshClient, string $localPath)
     {
+        $this->localPath = new Path($localPath);
     }
 
     public function recursive(bool $recursive = true): self
@@ -32,17 +38,24 @@ final class ScpToRemote
 
     public function to(string $path): bool
     {
-        if (! file_exists($this->localPath)) {
-            throw new \InvalidArgumentException('Local path '.$this->localPath.' does not exist');
-        }
+        $this->validateLocalPath();
 
-        if (! $this->recursive && ! is_dir($this->localPath)) {
-            throw new \InvalidArgumentException('Local path '.$this->localPath.' is not a file');
-        }
+        $remotePath = new Path($path)->asRemote($this->sshClient);
 
         $resource = $this->sshClient->getResource();
 
-        return ssh2_scp_send($resource, $this->localPath, $path, $this->createMode);
+        return ssh2_scp_send($resource, $this->localPath->path, $remotePath->path, $this->createMode);
+    }
+
+    private function validateLocalPath(): void
+    {
+        if (!$this->localPath->exists()) {
+            throw new FileNotFoundException('Local path '.$this->localPath->path.' does not exist');
+        }
+
+        if ($this->localPath->isDir() && ! $this->recursive) {
+            throw new NonRecursiveCopyException('Local path '.$this->localPath->path.' is a directory. Use recursive() method to copy directories');
+        }
     }
 
     private function copyFileToFile(string $localPath, string $remotePath): bool
@@ -50,25 +63,5 @@ final class ScpToRemote
         $resource = $this->sshClient->getResource();
 
         return ssh2_scp_send($resource, $localPath, $remotePath, $this->createMode);
-    }
-
-    private function isLocalPathDirectory(): bool
-    {
-        return is_dir($this->localPath);
-    }
-
-
-    private function isRemotePathExists(string $path): bool
-    {
-        $result = $this->sshClient->exec('if [ -e '.$path.' ]; then echo "true"; else echo "false"; fi');
-
-        return trim($result->output) === 'true';
-    }
-
-    private function isRemotePathDirectory(string $path): bool
-    {
-        $result = $this->sshClient->exec('if [ -d '.$path.' ]; then echo "true"; else echo "false"; fi');
-
-        return trim($result->output) === 'true';
     }
 }
