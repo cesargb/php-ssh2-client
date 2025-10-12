@@ -13,7 +13,7 @@ class PathRemoteTest extends TestCase
         $filename = '/etc/non_existent_file';
         $sshClient = Ssh2Client::connect(port: 2222)->withAuthPassword('root', 'root');
 
-        $path = new Path($filename)->asRemote($sshClient);
+        $path = (new Path($filename))->asRemote($sshClient);
 
         $this->assertFalse($path->exists(), 'Path should not exist');
 
@@ -25,7 +25,7 @@ class PathRemoteTest extends TestCase
         $filename = '/etc/passwd';
         $sshClient = Ssh2Client::connect(port: 2222)->withAuthPassword('root', 'root');
 
-        $path = new Path($filename)->asRemote($sshClient);
+        $path = (new Path($filename))->asRemote($sshClient);
 
         $this->assertTrue($path->exists(), 'Path should exist');
         $this->assertTrue($path->isFile(), 'Path should be a file');
@@ -39,7 +39,7 @@ class PathRemoteTest extends TestCase
         $filename = '/etc';
         $sshClient = Ssh2Client::connect(port: 2222)->withAuthPassword('root', 'root');
 
-        $path = new Path($filename)->asRemote($sshClient);
+        $path = (new Path($filename))->asRemote($sshClient);
 
         $this->assertTrue($path->exists(), 'Path should exist');
         $this->assertFalse($path->isFile(), 'Path should be a file');
