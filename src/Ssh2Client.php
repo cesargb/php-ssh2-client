@@ -23,7 +23,7 @@ final class Ssh2Client
         $this->resource = ssh2_connect(
             host: $host,
             port: $port,
-            methods: null,
+            methods: [],
             callbacks: [
                 'disconnect' => function () {
                     $this->resource = false;
