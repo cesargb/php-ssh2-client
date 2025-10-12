@@ -8,7 +8,7 @@ use Cesargb\Ssh\Exceptions\SshConnectionException;
 use Cesargb\Ssh\Exec\CommandResult;
 use Cesargb\Ssh\Ssh2Client;
 
-final class Exec
+final class ExecCommand
 {
     public function __construct(private Ssh2Client $sshClient)
     {
