@@ -2,7 +2,6 @@
 
 namespace Tests\Scp;
 
-use Cesargb\Ssh\Ssh2Client;
 use Tests\SshCase;
 
 class ScpToRemoteFileTest extends SshCase
