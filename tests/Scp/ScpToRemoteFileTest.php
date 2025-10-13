@@ -14,7 +14,7 @@ class ScpToRemoteFileTest extends TestCase
 
         $sshClient = Ssh2Client::connect(port: 2222)->withAuthPassword('root', 'root');
 
-        $copied = $sshClient->scp()->fromLocal($tempFile)->to($targetFile);
+        $copied = $sshClient->scpLocal($tempFile)->to($targetFile);
 
         unlink($tempFile);
 
@@ -36,8 +36,7 @@ class ScpToRemoteFileTest extends TestCase
         $sshClient = Ssh2Client::connect(port: 2222)
             ->withAuthPassword('root', 'root');
 
-        $copied = $sshClient->scp()
-            ->fromLocal($tempFile)
+        $copied = $sshClient->scpLocal($tempFile)
             ->to($targetDir);
 
         unlink($tempFile);

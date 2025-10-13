@@ -8,7 +8,8 @@ use Cesargb\Ssh\Exceptions\SshAuthenticateException;
 use Cesargb\Ssh\Exceptions\SshConnectionException;
 use Cesargb\Ssh\Exec\CommandResult;
 use Cesargb\Ssh\Exec\ExecCommand;
-use Cesargb\Ssh\Scp\ScpCommand;
+use Cesargb\Ssh\Scp\ScpToLocal;
+use Cesargb\Ssh\Scp\ScpToRemote;
 
 final class Ssh2Client
 {
@@ -127,9 +128,14 @@ final class Ssh2Client
         return (new ExecCommand($this))->execute($command);
     }
 
-    public function scp(): ScpCommand
+    public function scpLocal(string $path): ScpToRemote
     {
-        return new ScpCommand($this);
+        return new ScpToRemote($this, $path);
+    }
+
+    public function scpRemote(string $path): ScpToLocal
+    {
+        return new ScpToLocal($this, $path);
     }
 
     public function isConnected(): bool

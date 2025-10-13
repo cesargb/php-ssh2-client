@@ -41,14 +41,22 @@ composer require cesargb/ssh2-client
 
 ``` php
 $sshClient = Ssh2Client::connect(host: 'example.com', port: 22);
-$sshClient->withAuthPassword('username', 'password');
+$sshClient->withAuthPassword(
+    username: 'root',
+    password: 'root_password'
+);
 ```
 
 ### Public Key Authentication with Passphrase
 
 ``` php
 $sshClient = Ssh2Client::connect(host: 'example.com', port: 22);
-$sshClient->withAuthPublicKey('username', '/path/to/public/key.pub', '/path/to/private/key', 'passphrase');
+$sshClient->withAuthPublicKey(
+    username: 'root',
+    publicKey: '/path/to/public/key.pub',
+    privateKey: '/path/to/private/key',
+    passphrase: 'passphrase if required'
+);
 ```
 
 ### Agent-Based Authentication
@@ -81,8 +89,7 @@ $sshClient = Ssh2Client::connect(host: 'example.com', port: 22)
     ->withAuthPassword('username', 'password');
 
 $scpResult = $sshClient
-    ->scp()
-    ->fromLocal('/local/path/to/file.txt')
+    ->scpLocal('/local/path/to/file.txt')
     ->to('/remote/path/to/file.txt');
 
 $sshClient->disconnect();

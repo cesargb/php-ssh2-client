@@ -37,8 +37,7 @@ class ScpToRemoteDirectoryTest extends TestCase
         $localDir = __DIR__.'/../fixtures/dirs';
         $targetDir = $this->workDir;
 
-        $copied = self::$sshClient->scp()
-            ->fromLocal($localDir)
+        $copied = self::$sshClient->scpLocal($localDir)
             ->recursive()
             ->to($targetDir);
 
@@ -55,8 +54,7 @@ class ScpToRemoteDirectoryTest extends TestCase
         $localDir = __DIR__.'/../fixtures/dirs/';
         $targetDir = $this->workDir;
 
-        $copied = self::$sshClient->scp()
-            ->fromLocal($localDir)
+        $copied = self::$sshClient->scpLocal($localDir)
             ->recursive()
             ->to($targetDir);
 
