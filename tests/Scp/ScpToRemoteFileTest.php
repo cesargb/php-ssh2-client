@@ -1,30 +1,26 @@
 <?php
 
-namespace Test\Scp;
+namespace Tests\Scp;
 
 use Cesargb\Ssh\Ssh2Client;
-use PHPUnit\Framework\TestCase;
+use Tests\SshCase;
 
-class ScpToRemoteFileTest extends TestCase
+class ScpToRemoteFileTest extends SshCase
 {
     public function test_scp_send_file_to_file()
     {
         $tempFile = $this->generateTempFile('This is a test file for SCP upload.');
         $targetFile = '/tmp/'.basename($tempFile);
 
-        $sshClient = Ssh2Client::connect(port: 2222)->withAuthPassword('root', 'root');
-
-        $copied = $sshClient->scpLocal($tempFile)->to($targetFile);
+        $copied = self::$sshClient->scpLocal($tempFile)->to($targetFile);
 
         unlink($tempFile);
 
         $this->assertTrue($copied);
         $this->assertEquals(
             'This is a test file for SCP upload.',
-            $sshClient->exec('cat '.$targetFile)
+            self::$sshClient->exec('cat '.$targetFile)
         );
-
-        $sshClient->disconnect();
     }
 
     public function test_scp_send_file_to_directory()
@@ -33,10 +29,7 @@ class ScpToRemoteFileTest extends TestCase
         $targetDir = '/tmp/';
         $targetFile = $targetDir.basename($tempFile);
 
-        $sshClient = Ssh2Client::connect(port: 2222)
-            ->withAuthPassword('root', 'root');
-
-        $copied = $sshClient->scpLocal($tempFile)
+        $copied = self::$sshClient->scpLocal($tempFile)
             ->to($targetDir);
 
         unlink($tempFile);
@@ -44,10 +37,8 @@ class ScpToRemoteFileTest extends TestCase
         $this->assertTrue($copied);
         $this->assertEquals(
             'This is a test file for SCP upload.',
-            $sshClient->exec('cat '.$targetFile)
+            self::$sshClient->exec('cat '.$targetFile)
         );
-
-        $sshClient->disconnect();
     }
 
     private function generateTempFile(string $content): string

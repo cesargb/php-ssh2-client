@@ -1,6 +1,6 @@
 <?php
 
-namespace Test;
+namespace Tests;
 
 use Cesargb\Ssh\Ssh2Client;
 use PHPUnit\Framework\TestCase;
