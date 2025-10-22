@@ -36,7 +36,7 @@ final class ScpUpload
         return $this;
     }
 
-    public function to(string $path): bool
+    public function to(string $path): ScpResult
     {
         $this->validateLocalPath();
 
@@ -44,7 +44,8 @@ final class ScpUpload
 
         $this->validateRemotePath($remotePath);
 
-        return $this->copy($this->localPath, $remotePath);
+        $success = $this->copy($this->localPath, $remotePath);
+        return new ScpResult($this->sshClient, $success);
     }
 
     private function copy(Path $localPath, Path $remotePath): bool

@@ -27,7 +27,7 @@ class ScpUploadDirectoryTest extends SshCase
             ->recursive()
             ->to($targetDir);
 
-        $this->assertTrue($copied, 'Recursive copy failed');
+        $this->assertTrue($copied->success, 'Recursive copy failed');
         $this->assertTrue(self::$sshClient->exec('test -d '.$this->remoteWorkDir.'/dirs')->succeeded(), 'Directory was not copied');
         $this->assertTrue(self::$sshClient->exec('test -d '.$this->remoteWorkDir.'/dirs/subdir')->succeeded(), 'Subdirectory was not copied');
         $this->assertEquals('file1', trim(self::$sshClient->exec('cat '.$this->remoteWorkDir.'/dirs/file1.txt')));
@@ -44,7 +44,7 @@ class ScpUploadDirectoryTest extends SshCase
             ->recursive()
             ->to($targetDir);
 
-        $this->assertTrue($copied, 'Recursive copy failed');
+        $this->assertTrue($copied->success, 'Recursive copy failed');
         $this->assertEquals('file1', trim(self::$sshClient->exec('cat '.$this->remoteWorkDir.'/file1.txt')));
         $this->assertEquals('file2', trim(self::$sshClient->exec('cat '.$this->remoteWorkDir.'/file2.txt')));
         $this->assertTrue(self::$sshClient->exec('test -d '.$this->remoteWorkDir.'/subdir')->succeeded(), 'Subdirectory was not copied');

@@ -39,7 +39,7 @@ class Ssh2Test extends TestCase
         $scpCommand = $sshClient->scp()->upload(__DIR__.'/fixtures/authorized_keys')
             ->to('/root/.ssh/authorized_keys');
 
-        $this->assertTrue($scpCommand);
+        $this->assertTrue($scpCommand->success);
         $this->assertTrue($sshClient->exec('ls -la /root/.ssh/authorized_keys')->succeeded());
 
         $sshClient->disconnect();

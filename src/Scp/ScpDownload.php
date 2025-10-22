@@ -25,9 +25,10 @@ final class ScpDownload
         return $this;
     }
 
-    public function to(string $path): bool
+    public function to(string $path): ScpResult
     {
-        return $this->copyFile($this->remotePath, new Path($path));
+        $success = $this->copyFile($this->remotePath, new Path($path));
+        return new ScpResult($this->sshClient, $success);
     }
 
     private function copyFile(Path $remotePath, Path $localPath): bool
