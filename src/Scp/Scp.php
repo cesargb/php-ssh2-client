@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace Cesargb\Ssh\Scp;
 
 use Cesargb\Ssh\SshSession;
+use Cesargb\Ssh\Traits\ThrowableTrait;
 
 final class Scp
 {
+    use ThrowableTrait;
+
     private bool $recursive = false;
 
     public function __construct(private SshSession $session)

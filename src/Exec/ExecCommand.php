@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace Cesargb\Ssh\Exec;
 
+use Cesargb\Ssh\Exceptions\SshCommandException;
 use Cesargb\Ssh\Exceptions\SshConnectionException;
 use Cesargb\Ssh\SshSession;
+use Cesargb\Ssh\Traits\ThrowableTrait;
 
 final class ExecCommand
 {
+    use ThrowableTrait;
+
     public function __construct(private SshSession $session) {}
 
     public function execute(string $command): ExecResult
@@ -34,6 +38,12 @@ final class ExecCommand
 
         fclose($streamOut);
 
-        return new ExecResult($this->session, $result_dio, $result_err, $metadata);
+        $result = new ExecResult($this->session, $result_dio, $result_err, $metadata);
+
+        if ($this->throwExceptions && ! $result->succeeded()) {
+            throw new SshCommandException($result, (string)$result);
+        }
+
+        return $result;
     }
 }
