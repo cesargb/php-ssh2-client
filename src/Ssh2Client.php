@@ -6,11 +6,9 @@ namespace Cesargb\Ssh;
 
 use Cesargb\Ssh\Exceptions\SshAuthenticateException;
 use Cesargb\Ssh\Exceptions\SshConnectionException;
-use Cesargb\Ssh\Exec\CommandResult;
 use Cesargb\Ssh\Exec\ExecCommand;
+use Cesargb\Ssh\Exec\ExecResult;
 use Cesargb\Ssh\Scp\Scp;
-use Cesargb\Ssh\Scp\ScpToLocal;
-use Cesargb\Ssh\Scp\ScpToRemote;
 
 final class Ssh2Client
 {
@@ -121,10 +119,11 @@ final class Ssh2Client
 
         if (is_resource($this->resource)) {
             ssh2_disconnect($this->resource);
+            $this->resource = false;
         }
     }
 
-    public function exec(string $command): CommandResult
+    public function exec(string $command): ExecResult
     {
         return (new ExecCommand($this))->execute($command);
     }

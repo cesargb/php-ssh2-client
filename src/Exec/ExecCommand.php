@@ -11,7 +11,7 @@ final class ExecCommand
 {
     public function __construct(private Ssh2Client $sshClient) {}
 
-    public function execute(string $command): CommandResult
+    public function execute(string $command): ExecResult
     {
         $resource = $this->sshClient->getResource();
 
@@ -34,6 +34,6 @@ final class ExecCommand
 
         fclose($streamOut);
 
-        return new CommandResult($this->sshClient, $result_dio, $result_err, $metadata);
+        return new ExecResult($this->sshClient, $result_dio, $result_err, $metadata);
     }
 }

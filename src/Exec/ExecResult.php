@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace Cesargb\Ssh\Exec;
 
 use Cesargb\Ssh\Ssh2Client;
-use Cesargb\Ssh\Traits\Disconnectable;
+use Cesargb\Ssh\SshResult;
 
-final class CommandResult
+final class ExecResult extends SshResult
 {
-    use Disconnectable;
-
     private array $metaData = [];
 
     public function __construct(

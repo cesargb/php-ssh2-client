@@ -15,7 +15,7 @@ class ScpUploadFileTest extends SshCase
 
         unlink($tempFile);
 
-        $this->assertTrue($copied->success);
+        $this->assertTrue($copied->succeeded());
         $this->assertEquals(
             'This is a test file for SCP upload.',
             self::$sshClient->exec('cat '.$targetFile)
@@ -32,7 +32,7 @@ class ScpUploadFileTest extends SshCase
 
         unlink($tempFile);
 
-        $this->assertTrue($copied->success);
+        $this->assertTrue($copied->succeeded());
         $this->assertEquals(
             'This is a test file for SCP upload.',
             self::$sshClient->exec('cat '.$targetFile)

@@ -23,7 +23,7 @@ class ScpDownloadFileTest extends SshCase
 
         $copied = self::$sshClient->scp()->download('/tmp/file.txt')->to($localFileName);
 
-        $this->assertTrue($copied->success);
+        $this->assertTrue($copied->succeeded());
         $this->assertFileExists($localFileName);
         $this->assertEquals("file content\n", file_get_contents($localFileName));
 
@@ -37,7 +37,7 @@ class ScpDownloadFileTest extends SshCase
 
         $copied = self::$sshClient->scp()->download('/tmp/file.txt')->to($localDir);
 
-        $this->assertTrue($copied->success);
+        $this->assertTrue($copied->succeeded());
         $this->assertFileExists($localDir.'file.txt');
         $this->assertEquals("file content\n", file_get_contents($localDir.'file.txt'));
 
