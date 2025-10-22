@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Cesargb\Ssh\Scp;
 
 use Cesargb\Ssh\Files\Path;
-use Cesargb\Ssh\Ssh2Client;
+use Cesargb\Ssh\SshSession;
 
 final class ScpDownload
 {
@@ -13,9 +13,9 @@ final class ScpDownload
 
     private Path $remotePath;
 
-    public function __construct(private Ssh2Client $sshClient, string $remotePath)
+    public function __construct(private SshSession $session, string $remotePath)
     {
-        $this->remotePath = (new Path($remotePath))->asRemote($sshClient);
+        $this->remotePath = (new Path($remotePath))->asRemote($this->session);
     }
 
     public function recursive(bool $recursive = true): self
@@ -28,7 +28,7 @@ final class ScpDownload
     public function to(string $path): ScpResult
     {
         $success = $this->copyFile($this->remotePath, new Path($path));
-        return new ScpResult($this->sshClient, $success);
+        return new ScpResult($this->session, $success);
     }
 
     private function copyFile(Path $remotePath, Path $localPath): bool
@@ -38,7 +38,7 @@ final class ScpDownload
                 : $localPath->path;
 
         return ssh2_scp_recv(
-            $this->sshClient->getResource(),
+            $this->session->getResource(),
             $remotePath->path,
             $localFileName
         );

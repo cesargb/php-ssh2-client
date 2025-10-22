@@ -8,12 +8,12 @@ class ScpDownloadFileTest extends SshCase
 {
     protected function setUp(): void
     {
-        self::$sshClient->command()->execute('echo "file content" > /tmp/file.txt');
+        self::$sshSession->command()->execute('echo "file content" > /tmp/file.txt');
     }
 
     protected function tearDown(): void
     {
-        self::$sshClient->command()->execute('rm -f /tmp/file.txt');
+        self::$sshSession->command()->execute('rm -f /tmp/file.txt');
     }
 
     public function test_scp_recv_file_to_file()
@@ -21,7 +21,7 @@ class ScpDownloadFileTest extends SshCase
         $localFileName = __DIR__.'/../fixtures/file.txt';
         $this->assertFileDoesNotExist($localFileName);
 
-        $copied = self::$sshClient->scp()->download('/tmp/file.txt')->to($localFileName);
+        $copied = self::$sshSession->scp()->download('/tmp/file.txt')->to($localFileName);
 
         $this->assertTrue($copied->succeeded());
         $this->assertFileExists($localFileName);
@@ -35,7 +35,7 @@ class ScpDownloadFileTest extends SshCase
         $localDir = __DIR__.'/../fixtures/';
         $this->assertFileDoesNotExist($localDir.'file.txt');
 
-        $copied = self::$sshClient->scp()->download('/tmp/file.txt')->to($localDir);
+        $copied = self::$sshSession->scp()->download('/tmp/file.txt')->to($localDir);
 
         $this->assertTrue($copied->succeeded());
         $this->assertFileExists($localDir.'file.txt');

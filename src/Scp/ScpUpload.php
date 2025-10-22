@@ -7,7 +7,7 @@ namespace Cesargb\Ssh\Scp;
 use Cesargb\Ssh\Exceptions\Files\FileNotFoundException;
 use Cesargb\Ssh\Exceptions\Files\NonRecursiveCopyException;
 use Cesargb\Ssh\Files\Path;
-use Cesargb\Ssh\Ssh2Client;
+use Cesargb\Ssh\SshSession;
 
 final class ScpUpload
 {
@@ -17,7 +17,7 @@ final class ScpUpload
 
     private Path $localPath;
 
-    public function __construct(private Ssh2Client $sshClient, string $localPath)
+    public function __construct(private SshSession $session, string $localPath)
     {
         $this->localPath = new Path($localPath);
     }
@@ -40,12 +40,12 @@ final class ScpUpload
     {
         $this->validateLocalPath();
 
-        $remotePath = (new Path($path))->asRemote($this->sshClient);
+        $remotePath = (new Path($path))->asRemote($this->session);
 
         $this->validateRemotePath($remotePath);
 
         $success = $this->copy($this->localPath, $remotePath);
-        return new ScpResult($this->sshClient, $success);
+        return new ScpResult($this->session, $success);
     }
 
     private function copy(Path $localPath, Path $remotePath): bool
@@ -53,7 +53,7 @@ final class ScpUpload
         if ($localPath->isDir()) {
             if (substr($localPath->path, -1) !== '/') {
                 $remotePath = new Path(rtrim($remotePath->path, '/').'/'.basename($localPath->path));
-                $this->sshClient->command()->execute('mkdir -p '.$remotePath->path);
+                $this->session->command()->execute('mkdir -p '.$remotePath->path);
             }
 
             return $this->copyRecursive($localPath, $remotePath);
@@ -85,7 +85,7 @@ final class ScpUpload
             $childRemote = new Path(rtrim($remotePath->path, '/').'/'.$entry);
 
             if ($childLocal->isDir()) {
-                $this->sshClient->command()->execute('mkdir -p '.$childRemote->path);
+                $this->session->command()->execute('mkdir -p '.$childRemote->path);
             }
 
             $ok = $this->copyRecursive($childLocal, $childRemote);
@@ -105,7 +105,7 @@ final class ScpUpload
                 : $remotePath->path;
 
         return ssh2_scp_send(
-            $this->sshClient->getResource(),
+            $this->session->getResource(),
             $localPath->path,
             $remoteFileName,
             $this->createMode

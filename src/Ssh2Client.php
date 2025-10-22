@@ -6,9 +6,6 @@ namespace Cesargb\Ssh;
 
 use Cesargb\Ssh\Exceptions\SshAuthenticateException;
 use Cesargb\Ssh\Exceptions\SshConnectionException;
-use Cesargb\Ssh\Exec\ExecCommand;
-use Cesargb\Ssh\Exec\ExecResult;
-use Cesargb\Ssh\Scp\Scp;
 
 final class Ssh2Client
 {
@@ -54,7 +51,7 @@ final class Ssh2Client
         return $fingerprint;
     }
 
-    public function withAuthPublicKey(string $username, string $publicKey, string $privateKey, string $passphrase = ''): self
+    public function withAuthPublicKey(string $username, string $publicKey, string $privateKey, string $passphrase = ''): SshSession
     {
         $this->mustBeConnected();
 
@@ -65,10 +62,10 @@ final class Ssh2Client
 
         $this->authenticated = true;
 
-        return $this;
+        return new SshSession($this);
     }
 
-    public function withAuthPassword(string $username, string $password): self
+    public function withAuthPassword(string $username, string $password): SshSession
     {
         $this->mustBeConnected();
 
@@ -79,10 +76,10 @@ final class Ssh2Client
 
         $this->authenticated = true;
 
-        return $this;
+        return new SshSession($this);
     }
 
-    public function withAuthAgent(string $username): self
+    public function withAuthAgent(string $username): SshSession
     {
         $this->mustBeConnected();
 
@@ -93,10 +90,10 @@ final class Ssh2Client
 
         $this->authenticated = true;
 
-        return $this;
+        return new SshSession($this);
     }
 
-    public function withAuthNone(string $username): self
+    public function withAuthNone(string $username): SshSession
     {
         $this->mustBeConnected();
 
@@ -110,7 +107,7 @@ final class Ssh2Client
 
         $this->authenticated = true;
 
-        return $this;
+        return new SshSession($this);
     }
 
     public function disconnect(): void
@@ -121,16 +118,6 @@ final class Ssh2Client
             ssh2_disconnect($this->resource);
             $this->resource = false;
         }
-    }
-
-    public function command(): ExecCommand
-    {
-        return new ExecCommand($this);
-    }
-
-    public function scp(): Scp
-    {
-        return new Scp($this);
     }
 
     public function isConnected(): bool

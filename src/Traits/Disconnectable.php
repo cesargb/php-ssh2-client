@@ -2,16 +2,18 @@
 
 namespace Cesargb\Ssh\Traits;
 
-use Cesargb\Ssh\Ssh2Client;
+use Cesargb\Ssh\SshSession;
 
 trait Disconnectable
 {
-    protected ?Ssh2Client $sshClient = null;
+    protected ?SshSession $session = null;
 
     public function disconnect(): void
     {
-        if ($this->sshClient !== null) {
-            $this->sshClient->disconnect();
+        if (!$this->session) {
+            return;
         }
+
+        $this->session->disconnect();
     }
 }

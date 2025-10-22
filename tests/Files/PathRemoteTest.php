@@ -3,6 +3,7 @@
 namespace Tests\Files;
 
 use Cesargb\Ssh\Files\Path;
+use Cesargb\Ssh\Ssh2Client;
 use Tests\SshCase;
 
 class PathRemoteTest extends SshCase
@@ -10,7 +11,7 @@ class PathRemoteTest extends SshCase
     public function test_path_remote_does_not_exist()
     {
         $filename = '/etc/non_existent_file';
-        $sshClient = self::$sshClient::connect(port: 2222)->withAuthPassword('root', 'root');
+        $sshClient = Ssh2Client::connect(port: 2222)->withAuthPassword('root', 'root');
 
         $path = (new Path($filename))->asRemote($sshClient);
 
@@ -22,7 +23,7 @@ class PathRemoteTest extends SshCase
     public function test_path_remote_is_file()
     {
         $filename = '/etc/passwd';
-        $sshClient = self::$sshClient::connect(port: 2222)->withAuthPassword('root', 'root');
+        $sshClient = Ssh2Client::connect(port: 2222)->withAuthPassword('root', 'root');
 
         $path = (new Path($filename))->asRemote($sshClient);
 
@@ -36,7 +37,7 @@ class PathRemoteTest extends SshCase
     public function test_path_remote_is_directory()
     {
         $filename = '/etc';
-        $sshClient = self::$sshClient::connect(port: 2222)->withAuthPassword('root', 'root');
+        $sshClient = Ssh2Client::connect(port: 2222)->withAuthPassword('root', 'root');
 
         $path = (new Path($filename))->asRemote($sshClient);
 

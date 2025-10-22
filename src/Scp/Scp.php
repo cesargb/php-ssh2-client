@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Cesargb\Ssh\Scp;
 
-use Cesargb\Ssh\Ssh2Client;
+use Cesargb\Ssh\SshSession;
 
 final class Scp
 {
     private bool $recursive = false;
 
-    public function __construct(private Ssh2Client $sshClient)
+    public function __construct(private SshSession $session)
     {
     }
 
@@ -23,7 +23,7 @@ final class Scp
 
     public function upload(string $localPath): ScpUpload
     {
-        $scp = new ScpUpload($this->sshClient, $localPath);
+        $scp = new ScpUpload($this->session, $localPath);
 
         if ($this->recursive) {
             $scp->recursive($this->recursive);
@@ -34,7 +34,7 @@ final class Scp
 
     public function download(string $remotePath): ScpDownload
     {
-        $scp = new ScpDownload($this->sshClient, $remotePath);
+        $scp = new ScpDownload($this->session, $remotePath);
 
         if ($this->recursive) {
             $scp->recursive($this->recursive);

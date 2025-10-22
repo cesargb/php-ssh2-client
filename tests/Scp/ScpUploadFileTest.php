@@ -11,14 +11,14 @@ class ScpUploadFileTest extends SshCase
         $tempFile = $this->generateTempFile('This is a test file for SCP upload.');
         $targetFile = '/tmp/'.basename($tempFile);
 
-        $copied = self::$sshClient->scp()->upload($tempFile)->to($targetFile);
+        $copied = self::$sshSession->scp()->upload($tempFile)->to($targetFile);
 
         unlink($tempFile);
 
         $this->assertTrue($copied->succeeded());
         $this->assertEquals(
             'This is a test file for SCP upload.',
-            self::$sshClient->command()->execute('cat '.$targetFile)
+            self::$sshSession->command()->execute('cat '.$targetFile)
         );
     }
 
@@ -28,14 +28,14 @@ class ScpUploadFileTest extends SshCase
         $targetDir = '/tmp/';
         $targetFile = $targetDir.basename($tempFile);
 
-        $copied = self::$sshClient->scp()->upload($tempFile)->to($targetDir);
+        $copied = self::$sshSession->scp()->upload($tempFile)->to($targetDir);
 
         unlink($tempFile);
 
         $this->assertTrue($copied->succeeded());
         $this->assertEquals(
             'This is a test file for SCP upload.',
-            self::$sshClient->command()->execute('cat '.$targetFile)
+            self::$sshSession->command()->execute('cat '.$targetFile)
         );
     }
 

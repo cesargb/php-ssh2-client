@@ -6,19 +6,20 @@ namespace Cesargb\Ssh\Exec;
 
 use Cesargb\Ssh\Ssh2Client;
 use Cesargb\Ssh\SshResult;
+use Cesargb\Ssh\SshSession;
 
 final class ExecResult extends SshResult
 {
     private array $metaData = [];
 
     public function __construct(
-        Ssh2Client $sshClient,
+        SshSession $session,
         public readonly string $output,
         public readonly string $errorOutput,
         array $metaData = []
         )
     {
-        $this->sshClient = $sshClient;
+        $this->session = $session;
         $this->metaData = $metaData;
     }
 

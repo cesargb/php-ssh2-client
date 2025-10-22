@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Cesargb\Ssh\Files;
 
 use Cesargb\Ssh\Ssh2Client;
+use Cesargb\Ssh\SshSession;
 
 class Path
 {
@@ -14,13 +15,13 @@ class Path
 
     private ?bool $isFile = null;
 
-    private ?Ssh2Client $sshClient = null;
+    private ?SshSession $session = null;
 
     public function __construct(public readonly string $path) {}
 
-    public function asRemote(Ssh2Client $sshClient): self
+    public function asRemote(SshSession $session): self
     {
-        $this->sshClient = $sshClient;
+        $this->session = $session;
 
         return $this;
     }
@@ -31,8 +32,8 @@ class Path
             return $this->exists;
         }
 
-        $this->exists = $this->sshClient
-            ? $this->sshClient->command()->execute('test -e '.escapeshellarg($this->path))->succeeded()
+        $this->exists = $this->session
+            ? $this->session->command()->execute('test -e '.escapeshellarg($this->path))->succeeded()
             : file_exists($this->path);
 
         return $this->exists;
@@ -44,8 +45,8 @@ class Path
             return $this->isFile;
         }
 
-        $this->isFile = $this->sshClient
-            ? $this->sshClient->command()->execute('test -f '.escapeshellarg($this->path))->succeeded()
+        $this->isFile = $this->session
+            ? $this->session->command()->execute('test -f '.escapeshellarg($this->path))->succeeded()
             : is_file($this->path);
 
         return $this->isFile;
@@ -57,8 +58,8 @@ class Path
             return $this->isDir;
         }
 
-        $this->isDir = $this->sshClient
-            ? $this->sshClient->command()->execute('test -d '.escapeshellarg($this->path))->succeeded()
+        $this->isDir = $this->session
+            ? $this->session->command()->execute('test -d '.escapeshellarg($this->path))->succeeded()
             : is_dir($this->path);
 
         return $this->isDir;
