@@ -38,7 +38,7 @@ final class ExecCommand
 
         fclose($streamOut);
 
-        $result = new ExecResult($this->session, $result_dio, $result_err, $metadata);
+        $result = new ExecResult($this->session, $result_dio, $result_err, $metadata, $command);
 
         if ($this->throwExceptions && ! $result->succeeded()) {
             throw new SshCommandException($result, (string)$result);

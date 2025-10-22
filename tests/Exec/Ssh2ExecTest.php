@@ -2,6 +2,7 @@
 
 namespace Tests\Exec;
 
+use Cesargb\Ssh\Exceptions\SshCommandException;
 use Tests\SshCase;
 
 class Ssh2ExecTest extends SshCase
@@ -23,5 +24,16 @@ class Ssh2ExecTest extends SshCase
         $this->assertEquals(127, $result->getExitStatus(), 'Exit status should be 127 for command not found');
         $this->assertFalse($result->succeeded(), 'Command should not succeed');
         $this->assertStringContainsString('command not found', $result->errorOutput, 'Error output should contain "command not found"');
+    }
+
+    public function test_ssh2_exec_with_thrown()
+    {
+        try {
+            self::$sshSession->throw()->command()->execute('command_does_not_exist');
+        } catch (SshCommandException $e) {
+            $this->assertEquals(127, $e->result->getExitStatus(), 'Exit status should be 127 for command not found');
+            $this->assertFalse($e->result->succeeded(), 'Command should not succeed');
+            $this->assertStringContainsString('command not found', $e->result->errorOutput, 'Error output should contain "command not found"');
+        }
     }
 }

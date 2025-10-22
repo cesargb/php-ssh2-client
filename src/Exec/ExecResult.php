@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Cesargb\Ssh\Exec;
 
-use Cesargb\Ssh\Ssh2Client;
 use Cesargb\Ssh\SshResult;
 use Cesargb\Ssh\SshSession;
 
@@ -16,8 +15,9 @@ final class ExecResult extends SshResult
         SshSession $session,
         public readonly string $output,
         public readonly string $errorOutput,
-        array $metaData = []
-        )
+        array $metaData,
+        public readonly string $command,
+    )
     {
         $this->session = $session;
         $this->metaData = $metaData;
