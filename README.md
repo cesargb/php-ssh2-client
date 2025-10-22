@@ -89,7 +89,8 @@ $sshClient = Ssh2Client::connect(host: 'example.com', port: 22)
     ->withAuthPassword('username', 'password');
 
 $scpResult = $sshClient
-    ->scpLocal('/local/path/to/file.txt')
+    ->scp()
+    ->upload('/local/path/to/file.txt')
     ->to('/remote/path/to/file.txt');
 
 $sshClient->disconnect();

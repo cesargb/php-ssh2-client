@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Cesargb\Ssh\Scp;
 
-use Cesargb\Ssh\Exceptions\Files\FileNotFoundException;
-use Cesargb\Ssh\Exceptions\Files\NonRecursiveCopyException;
 use Cesargb\Ssh\Files\Path;
 use Cesargb\Ssh\Ssh2Client;
 

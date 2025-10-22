@@ -36,7 +36,7 @@ class Ssh2Test extends TestCase
     {
         $sshClient = Ssh2Client::connect(port: 2222)->withAuthPassword('root', 'root');
 
-        $scpCommand = $sshClient->scpLocal(__DIR__.'/fixtures/authorized_keys')
+        $scpCommand = $sshClient->scp()->upload(__DIR__.'/fixtures/authorized_keys')
             ->to('/root/.ssh/authorized_keys');
 
         $this->assertTrue($scpCommand);
