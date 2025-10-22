@@ -9,7 +9,7 @@ use Cesargb\Ssh\Exceptions\Files\NonRecursiveCopyException;
 use Cesargb\Ssh\Files\Path;
 use Cesargb\Ssh\Ssh2Client;
 
-final class ScpToRemote
+final class ScpUpload
 {
     private bool $recursive = false;
 

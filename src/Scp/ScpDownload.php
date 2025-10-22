@@ -7,7 +7,7 @@ namespace Cesargb\Ssh\Scp;
 use Cesargb\Ssh\Files\Path;
 use Cesargb\Ssh\Ssh2Client;
 
-final class ScpToLocal
+final class ScpDownload
 {
     private bool $recursive = false;
 

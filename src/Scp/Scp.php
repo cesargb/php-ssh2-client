@@ -21,9 +21,9 @@ final class Scp
         return $this;
     }
 
-    public function upload(string $localPath): ScpToRemote
+    public function upload(string $localPath): ScpUpload
     {
-        $scp = new ScpToRemote($this->sshClient, $localPath);
+        $scp = new ScpUpload($this->sshClient, $localPath);
 
         if ($this->recursive) {
             $scp->recursive($this->recursive);
@@ -32,9 +32,9 @@ final class Scp
         return $scp;
     }
 
-    public function download(string $remotePath): ScpToLocal
+    public function download(string $remotePath): ScpDownload
     {
-        $scp = new ScpToLocal($this->sshClient, $remotePath);
+        $scp = new ScpDownload($this->sshClient, $remotePath);
 
         if ($this->recursive) {
             $scp->recursive($this->recursive);

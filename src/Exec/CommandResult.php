@@ -4,12 +4,23 @@ declare(strict_types=1);
 
 namespace Cesargb\Ssh\Exec;
 
+use Cesargb\Ssh\Ssh2Client;
+use Cesargb\Ssh\Traits\Disconnectable;
+
 final class CommandResult
 {
+    use Disconnectable;
+
     private array $metaData = [];
 
-    public function __construct(public readonly string $output, public readonly string $errorOutput, array $metaData = [])
+    public function __construct(
+        Ssh2Client $sshClient,
+        public readonly string $output,
+        public readonly string $errorOutput,
+        array $metaData = []
+        )
     {
+        $this->sshClient = $sshClient;
         $this->metaData = $metaData;
     }
 

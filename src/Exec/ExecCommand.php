@@ -34,6 +34,6 @@ final class ExecCommand
 
         fclose($streamOut);
 
-        return new CommandResult($result_dio, $result_err, $metadata);
+        return new CommandResult($this->sshClient, $result_dio, $result_err, $metadata);
     }
 }
