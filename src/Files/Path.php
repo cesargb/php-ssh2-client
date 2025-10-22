@@ -32,7 +32,7 @@ class Path
         }
 
         $this->exists = $this->sshClient
-            ? $this->sshClient->exec('test -e '.escapeshellarg($this->path))->succeeded()
+            ? $this->sshClient->command()->execute('test -e '.escapeshellarg($this->path))->succeeded()
             : file_exists($this->path);
 
         return $this->exists;
@@ -45,7 +45,7 @@ class Path
         }
 
         $this->isFile = $this->sshClient
-            ? $this->sshClient->exec('test -f '.escapeshellarg($this->path))->succeeded()
+            ? $this->sshClient->command()->execute('test -f '.escapeshellarg($this->path))->succeeded()
             : is_file($this->path);
 
         return $this->isFile;
@@ -58,7 +58,7 @@ class Path
         }
 
         $this->isDir = $this->sshClient
-            ? $this->sshClient->exec('test -d '.escapeshellarg($this->path))->succeeded()
+            ? $this->sshClient->command()->execute('test -d '.escapeshellarg($this->path))->succeeded()
             : is_dir($this->path);
 
         return $this->isDir;

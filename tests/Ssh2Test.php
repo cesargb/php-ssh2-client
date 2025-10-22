@@ -40,7 +40,7 @@ class Ssh2Test extends TestCase
             ->to('/root/.ssh/authorized_keys');
 
         $this->assertTrue($scpCommand->succeeded());
-        $this->assertTrue($sshClient->exec('ls -la /root/.ssh/authorized_keys')->succeeded());
+        $this->assertTrue($sshClient->command()->execute('ls -la /root/.ssh/authorized_keys')->succeeded());
 
         $sshClient->disconnect();
     }

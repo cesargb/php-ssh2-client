@@ -53,7 +53,7 @@ final class ScpUpload
         if ($localPath->isDir()) {
             if (substr($localPath->path, -1) !== '/') {
                 $remotePath = new Path(rtrim($remotePath->path, '/').'/'.basename($localPath->path));
-                $this->sshClient->exec('mkdir -p '.$remotePath->path);
+                $this->sshClient->command()->execute('mkdir -p '.$remotePath->path);
             }
 
             return $this->copyRecursive($localPath, $remotePath);
@@ -85,7 +85,7 @@ final class ScpUpload
             $childRemote = new Path(rtrim($remotePath->path, '/').'/'.$entry);
 
             if ($childLocal->isDir()) {
-                $this->sshClient->exec('mkdir -p '.$childRemote->path);
+                $this->sshClient->command()->execute('mkdir -p '.$childRemote->path);
             }
 
             $ok = $this->copyRecursive($childLocal, $childRemote);

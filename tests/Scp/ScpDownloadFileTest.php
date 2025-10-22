@@ -8,12 +8,12 @@ class ScpDownloadFileTest extends SshCase
 {
     protected function setUp(): void
     {
-        self::$sshClient->exec('echo "file content" > /tmp/file.txt');
+        self::$sshClient->command()->execute('echo "file content" > /tmp/file.txt');
     }
 
     protected function tearDown(): void
     {
-        self::$sshClient->exec('rm -f /tmp/file.txt');
+        self::$sshClient->command()->execute('rm -f /tmp/file.txt');
     }
 
     public function test_scp_recv_file_to_file()

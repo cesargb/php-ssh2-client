@@ -123,9 +123,9 @@ final class Ssh2Client
         }
     }
 
-    public function exec(string $command): ExecResult
+    public function command(): ExecCommand
     {
-        return (new ExecCommand($this))->execute($command);
+        return new ExecCommand($this);
     }
 
     public function scp(): Scp

@@ -16,7 +16,7 @@ echo "Server Fingerprint: {$fingerprint}\n";
 
 $sshClient->withAuthPassword('username', 'password');
 
-$commandResult = $sshClient->exec('ls -la');
+$commandResult = $sshClient->command()->execute('ls -la');
 
 $sshClient->disconnect();
 
@@ -72,7 +72,7 @@ $sshClient->withAuthAgent('username');
 $sshClient = Ssh2Client::connect(host: 'example.com', port: 22)
     ->withAuthPassword('username', 'password');
 
-$result = $sshClient->exec('ls -l');
+$result = $sshClient->command()->execute('ls -l');
 
 $sshClient->disconnect();
 
