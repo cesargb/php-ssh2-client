@@ -20,12 +20,12 @@ final class SshSession
 
     public function command(): ExecCommand
     {
-        return new ExecCommand($this)->throw($this->throwExceptions);
+        return (new ExecCommand($this))->throw($this->throwExceptions);
     }
 
     public function scp(): Scp
     {
-        return new Scp($this)->throw($this->throwExceptions);
+        return (new Scp($this))->throw($this->throwExceptions);
     }
 
     public function getResource()
