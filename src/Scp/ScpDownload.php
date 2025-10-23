@@ -6,9 +6,12 @@ namespace Cesargb\Ssh\Scp;
 
 use Cesargb\Ssh\Files\Path;
 use Cesargb\Ssh\SshSession;
+use Cesargb\Ssh\Traits\ThrowableTrait;
 
 final class ScpDownload
 {
+    use ThrowableTrait;
+
     private bool $recursive = false;
 
     private Path $remotePath;

@@ -26,7 +26,7 @@ final class Scp
 
     public function upload(string $localPath): ScpUpload
     {
-        $scp = new ScpUpload($this->session, $localPath);
+        $scp = new ScpUpload($this->session, $localPath)->throw($this->throwExceptions);
 
         if ($this->recursive) {
             $scp->recursive($this->recursive);
@@ -37,7 +37,7 @@ final class Scp
 
     public function download(string $remotePath): ScpDownload
     {
-        $scp = new ScpDownload($this->session, $remotePath);
+        $scp = new ScpDownload($this->session, $remotePath)->throw($this->throwExceptions);
 
         if ($this->recursive) {
             $scp->recursive($this->recursive);

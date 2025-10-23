@@ -8,9 +8,12 @@ use Cesargb\Ssh\Exceptions\Files\FileNotFoundException;
 use Cesargb\Ssh\Exceptions\Files\NonRecursiveCopyException;
 use Cesargb\Ssh\Files\Path;
 use Cesargb\Ssh\SshSession;
+use Cesargb\Ssh\Traits\ThrowableTrait;
 
 final class ScpUpload
 {
+    use ThrowableTrait;
+
     private bool $recursive = false;
 
     private int $createMode = 0644;
