@@ -39,10 +39,6 @@ final class Scp
     {
         $scp = (new ScpDownload($this->session, $remotePath))->throw($this->throwExceptions);
 
-        if ($this->recursive) {
-            $scp->recursive($this->recursive);
-        }
-
         return $scp;
     }
 }
