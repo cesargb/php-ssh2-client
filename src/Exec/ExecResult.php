@@ -17,8 +17,7 @@ final class ExecResult extends SshResult
         public readonly string $errorOutput,
         array $metaData,
         public readonly string $command,
-    )
-    {
+    ) {
         $this->session = $session;
         $this->metaData = $metaData;
     }

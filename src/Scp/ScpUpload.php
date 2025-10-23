@@ -48,6 +48,7 @@ final class ScpUpload
         $this->validateRemotePath($remotePath);
 
         $success = $this->copy($this->localPath, $remotePath);
+
         return new ScpResult($this->session, $success);
     }
 

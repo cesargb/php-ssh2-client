@@ -10,7 +10,7 @@ trait Disconnectable
 
     public function disconnect(): void
     {
-        if (!$this->session) {
+        if (! $this->session) {
             return;
         }
 

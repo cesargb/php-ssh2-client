@@ -14,9 +14,7 @@ final class SshSession
     use Disconnectable;
     use ThrowableTrait;
 
-    public function __construct(private Ssh2Client $client)
-    {
-    }
+    public function __construct(private Ssh2Client $client) {}
 
     public function command(): ExecCommand
     {

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Cesargb\Ssh\Files;
 
-use Cesargb\Ssh\Ssh2Client;
 use Cesargb\Ssh\SshSession;
 
 class Path

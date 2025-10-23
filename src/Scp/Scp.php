@@ -13,9 +13,7 @@ final class Scp
 
     private bool $recursive = false;
 
-    public function __construct(private SshSession $session)
-    {
-    }
+    public function __construct(private SshSession $session) {}
 
     public function recursive(bool $recursive = true): self
     {

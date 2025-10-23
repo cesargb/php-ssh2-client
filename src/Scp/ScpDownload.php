@@ -22,6 +22,7 @@ final class ScpDownload
     public function to(string $path): ScpResult
     {
         $success = $this->copyFile($this->remotePath, new Path($path));
+
         return new ScpResult($this->session, $success);
     }
 
